@@ -1,5 +1,8 @@
 package view;
 
+import view.chess.Chess;
+import view.chess.ChessManager;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -14,12 +17,13 @@ public class Board extends JPanel {
     private  final int MARGIN = 20;  //边距
     private  final int ROWS = 15;  //棋盘行数
     private  final int COLS = 15;  //棋盘列数
-    private  int[][] chesses = new int[ROWS][COLS];
+    private ChessManager chessMgr;
 
     public Board(){
         BoardListener borderListener = new BoardListener();
         addMouseListener(borderListener);
         addMouseMotionListener(borderListener);
+        chessMgr = new ChessManager(ROWS,COLS);
         setBackground(Color.cyan);
     }
 
@@ -29,6 +33,7 @@ public class Board extends JPanel {
 
         drawGrid(graphics);
         drawStar(graphics);
+        chessMgr.drawAllChess(graphics);
 
     }
 
@@ -58,6 +63,21 @@ public class Board extends JPanel {
         graphics.fillArc(MARGIN + 11 * span - width/2,MARGIN + 3 * span - width/2 ,width,height,0,360);
     }
 
+
+    //将数组的下标映射到实际的坐标
+    private Point mappingToPoint(int row,int col){
+
+        int x = MARGIN + row * getGridSpan();
+        int y = MARGIN + col * getGridSpan();
+        return new Point(x,y);
+    }
+
+    //将物理坐标映射为数组下标
+    private Point mappingToArray(int row,int col){
+         return null;
+    }
+
+
     class BoardListener extends MouseAdapter{
 
         public BoardListener() {
@@ -67,15 +87,7 @@ public class Board extends JPanel {
 
         @Override
         public void mousePressed(MouseEvent e){
-            RadialGradientPaint paint = new RadialGradientPaint(e.getX(),e.getY(), 20, new float[]{0f, 1f}
-                    , new Color[]{Color.WHITE, Color.BLACK});
-
-            ((Graphics2D) getGraphics()).setPaint(paint);
-            ((Graphics2D) getGraphics()).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            ((Graphics2D) getGraphics()).setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_DEFAULT);
-
-            Ellipse2D ellipse = new Ellipse2D.Float(e.getX()-20,e.getY()-20, 35, 35);
-            ((Graphics2D)getGraphics()).fill(ellipse);
+            mappingToArray(e.getX(),e.getY());
         }
 
         public void mouseMoved(MouseEvent e) {
