@@ -12,17 +12,17 @@ public class Board extends JPanel {
 
     private static final long serialVersionUID = -7280514462376551938L;
 
-    private  final int MARGIN = 20;  //边距
-    private  final int ROWS = 15;  //棋盘行数
-    private  final int COLS = 15;  //棋盘列数
+    private final int MARGIN = 20;  //边距
+    private final int ROWS = 15;  //棋盘行数
+    private final int COLS = 15;  //棋盘列数
     private ChessManager chessMgr;
 
-    public Board(){
+    public Board() {
         BoardListener borderListener = new BoardListener();
         addMouseListener(borderListener);
         addMouseMotionListener(borderListener);
-        chessMgr = new ChessManager(ROWS,COLS);
-        setBackground(Color.cyan);
+        chessMgr = new ChessManager(ROWS, COLS);
+        setBackground(Color.pink);
     }
 
     @Override
@@ -35,71 +35,71 @@ public class Board extends JPanel {
 
     }
 
-    private int getGridSpan(){
-        return (getWidth()- MARGIN*2) / (ROWS-1);
+    private int getGridSpan() {
+        return (getWidth() - MARGIN * 2) / (ROWS - 1);
     }
 
-    private void drawGrid(Graphics graphics){
+    private void drawGrid(Graphics graphics) {
         int span = getGridSpan();
         for (int i = 0; i < ROWS; i++) {
-            graphics.drawLine(MARGIN, MARGIN + i * span, MARGIN + (COLS-1) * span, MARGIN + i * span);
+            graphics.drawLine(MARGIN, MARGIN + i * span, MARGIN + (COLS - 1) * span, MARGIN + i * span);
         }
         for (int j = 0; j < COLS; j++) {
-            graphics.drawLine(MARGIN + j * span, MARGIN, MARGIN + j * span, MARGIN + (ROWS-1) * span);
+            graphics.drawLine(MARGIN + j * span, MARGIN, MARGIN + j * span, MARGIN + (ROWS - 1) * span);
         }
     }
 
-    private void drawStar(Graphics graphics){
+    private void drawStar(Graphics graphics) {
         int span = getGridSpan();
         int width = 10;
         int height = 10;
 
-        graphics.fillArc(MARGIN + 3 * span - width/2,MARGIN + 3 * span - width/2 ,width,height,0,360);
-        graphics.fillArc(MARGIN + 11 * span - width/2,MARGIN + 11 * span - width/2 ,width,height,0,360);
-        graphics.fillArc(MARGIN + 7 * span - width/2,MARGIN + 7 * span - width/2 ,width,height,0,360);
-        graphics.fillArc(MARGIN + 3 * span - width/2,MARGIN + 11 * span - width/2 ,width,height,0,360);
-        graphics.fillArc(MARGIN + 11 * span - width/2,MARGIN + 3 * span - width/2 ,width,height,0,360);
+        graphics.fillArc(MARGIN + 3 * span - width / 2, MARGIN + 3 * span - width / 2, width, height, 0, 360);
+        graphics.fillArc(MARGIN + 11 * span - width / 2, MARGIN + 11 * span - width / 2, width, height, 0, 360);
+        graphics.fillArc(MARGIN + 7 * span - width / 2, MARGIN + 7 * span - width / 2, width, height, 0, 360);
+        graphics.fillArc(MARGIN + 3 * span - width / 2, MARGIN + 11 * span - width / 2, width, height, 0, 360);
+        graphics.fillArc(MARGIN + 11 * span - width / 2, MARGIN + 3 * span - width / 2, width, height, 0, 360);
     }
 
-    private void drawAllChess(Graphics graphics){
+    private void drawAllChess(Graphics graphics) {
 
-            for (int i = 0; i < ROWS; i++) {
-                for (int j = 0; j < COLS; j++) {
-                    if (!chessMgr.isExist(i,j)) {
-                        continue;
-                    }
-
-                    chessMgr.drawChess(i,j,rowMappingToPointX(i),colMappingToPointY(j),graphics);
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLS; j++) {
+                if (!chessMgr.isExist(i, j)) {
+                    continue;
                 }
+
+                chessMgr.drawChess(i, j, rowMappingToPointX(i), colMappingToPointY(j), graphics);
             }
+        }
 
     }
 
 
     //将数组的下标映射到实际的坐标
-    private int rowMappingToPointX(int row){
-       return MARGIN + row * getGridSpan();
+    private int rowMappingToPointX(int row) {
+        return MARGIN + row * getGridSpan();
 
     }
 
     //将数组的下标映射到实际的坐标
-    private int colMappingToPointY(int col){
-        return  MARGIN + col * getGridSpan();
+    private int colMappingToPointY(int col) {
+        return MARGIN + col * getGridSpan();
     }
 
 
     //将物理坐标映射为数组下标
-    private int xMappingToArrayRow(int x){
+    private int xMappingToArrayRow(int x) {
         return (x - MARGIN) / getGridSpan();
     }
 
     //将物理坐标映射为数组下标
-    private int yMappingToArrayCol(int y){
+    private int yMappingToArrayCol(int y) {
         return (y - MARGIN) / getGridSpan();
     }
 
 
-    class BoardListener extends MouseAdapter{
+    class BoardListener extends MouseAdapter {
 
         public BoardListener() {
             super();
@@ -107,17 +107,18 @@ public class Board extends JPanel {
 
 
         @Override
-        public void mousePressed(MouseEvent e){
-           int col = xMappingToArrayRow(e.getX());
-           int row = yMappingToArrayCol(e.getY());
-           if(chessMgr.isExist(row,col)){
-               //TODO 需要给出提示和声音
-               return;
-           }
+        public void mousePressed(MouseEvent e) {
+            int row = xMappingToArrayRow(e.getX());
+            int col = yMappingToArrayCol(e.getY());
 
-            chessMgr.addChess(row,col);
-            chessMgr.drawChess(row,col,e.getX(),e.getY(),getGraphics());
-            if(chessMgr.isWin(row,col)){
+            if (chessMgr.isExist(row, col)) {
+                //TODO 需要给出提示和声音
+                return;
+            }
+
+            chessMgr.addChess(row, col);
+            chessMgr.drawChess(row, col, rowMappingToPointX(row), colMappingToPointY(col), getGraphics());
+            if (chessMgr.isWin(row, col)) {
                 System.out.println("Win");
             }
         }
@@ -130,7 +131,7 @@ public class Board extends JPanel {
     public static void main(String[] args) {
         JFrame frame = new JFrame("Test draw a board");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600,600);
+        frame.setSize(600, 600);
         frame.setVisible(true);
         frame.setBackground(Color.pink);
         frame.add(new Board());

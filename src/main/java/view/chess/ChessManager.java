@@ -60,31 +60,23 @@ public class ChessManager {
     }
 
     public boolean isWin(int row,int col){
-        System.out.println(state[row][col]);
-        System.out.println(chessType);
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                System.out.print(state[i][j] + " ");
-            }
-            System.out.println("");
-        }
         if(horizontalJudget(row,col)){
            return true;
        }
-        System.out.println("1");
+
         if(verticalJudget(row,col)){
            return true;
        }
-        System.out.println("2");
+
        if(leftOblique(row,col)){
            return true;
        }
-        System.out.println("3");
+
        if(rightOblique(row,col)){
            return true;
        }
-        System.out.println("4");
+
         return false;
     }
 
