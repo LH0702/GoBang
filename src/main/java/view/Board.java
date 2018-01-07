@@ -7,8 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Ellipse2D;
-
 
 public class Board extends JPanel {
 
@@ -33,7 +31,7 @@ public class Board extends JPanel {
 
         drawGrid(graphics);
         drawStar(graphics);
-        chessMgr.drawAllChess(graphics);
+        drawAllChess(graphics);
 
     }
 
@@ -63,18 +61,38 @@ public class Board extends JPanel {
         graphics.fillArc(MARGIN + 11 * span - width/2,MARGIN + 3 * span - width/2 ,width,height,0,360);
     }
 
+    private void drawAllChess(Graphics graphics){
 
-    //将数组的下标映射到实际的坐标
-    private Point mappingToPoint(int row,int col){
+            for (int i = 0; i < ROWS; i++) {
+                for (int j = 0; j < COLS; j++) {
+                    if (!chessMgr.isExist(i,j)) {
+                        continue;
+                    }
 
-        int x = MARGIN + row * getGridSpan();
-        int y = MARGIN + col * getGridSpan();
-        return new Point(x,y);
+                    chessMgr.drawChess(i,j,rowMappingToPointX(i),colMappingToPointY(j),graphics);
+                }
+            }
+
     }
 
+
+    //将数组的下标映射到实际的坐标
+    private int rowMappingToPointX(int row){
+       return MARGIN + row * getGridSpan();
+
+    }
+
+    //将数组的下标映射到实际的坐标
+    private int colMappingToPointY(int col){
+        return  MARGIN + col * getGridSpan();
+    }
+
+
     //将物理坐标映射为数组下标
-    private Point mappingToArray(int row,int col){
-         return null;
+    private Point mappingToArray(int x,int y){
+        int row = (x - MARGIN) / getGridSpan();
+        int col = (y - MARGIN) / getGridSpan();
+        return new Point(row,col);
     }
 
 
@@ -87,7 +105,20 @@ public class Board extends JPanel {
 
         @Override
         public void mousePressed(MouseEvent e){
-            mappingToArray(e.getX(),e.getY());
+           Point point =  mappingToArray(e.getX(),e.getY());
+            System.out.println(point.x);
+            System.out.println(point.y);
+           if(chessMgr.isExist(point.x,point.y)){
+               //TODO 需要给出提示和声音
+               return;
+           }
+
+
+            chessMgr.addChess(point.x,point.y);
+            chessMgr.drawChess(point.x,point.y,e.getX(),e.getY(),getGraphics());
+            if(chessMgr.isWin(point.x,point.y)){
+                System.out.println("Win");
+            }
         }
 
         public void mouseMoved(MouseEvent e) {

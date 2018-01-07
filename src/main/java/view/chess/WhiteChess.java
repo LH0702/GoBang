@@ -3,8 +3,8 @@ package view.chess;
 import java.awt.*;
 
 public class WhiteChess extends Chess {
-    public WhiteChess(Point point, Color color) {
-        super(point, color);
+    public WhiteChess(Color color) {
+        super(color);
     }
 
     @Override

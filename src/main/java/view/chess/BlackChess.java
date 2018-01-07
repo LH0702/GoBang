@@ -4,8 +4,8 @@ import java.awt.*;
 
 public class BlackChess extends Chess {
 
-    public BlackChess(Point point, Color color) {
-        super(point, color);
+    public BlackChess(Color color) {
+        super(color);
     }
 
     @Override

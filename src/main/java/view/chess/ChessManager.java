@@ -12,13 +12,13 @@ public class ChessManager {
     private int chessType;
 
     // 用于维护棋子的状态，0 代表 white chess ，1 代表 black chess 。 -1 代表 empty
-    private int[][] chessesState;
+    private int[][] state;
     private Chess[][] chesses;
 
     public ChessManager(int rows, int cols) {
         this.cols = cols;
         this.rows = rows;
-        chessesState = new int[rows][cols];
+        state = new int[rows][cols];
         chesses = new Chess[rows][cols];
 
         initChess();
@@ -27,45 +27,34 @@ public class ChessManager {
     private void initChess() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                chessesState[i][j] = EMPTY_CHESS;
+                state[i][j] = EMPTY_CHESS;
             }
         }
     }
 
-    public void drawAllChess(Graphics graphics) {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (chessesState[i][j] == EMPTY_CHESS) {
-                    continue;
-                }
 
-                chesses[i][j].drawChess(graphics);
-            }
-        }
-
-    }
 
     public boolean isExist(int row, int col){
-        if(chessesState[row][col] != EMPTY_CHESS){
+        if(state[row][col] != EMPTY_CHESS){
             return true;
         }
 
         return false;
     }
 
-    public void drawChess(int row,int col,Graphics graphics){
-        chesses[row][col].drawChess(graphics);
+    public void drawChess(int row,int col,int x ,int y,Graphics graphics){
+        chesses[row][col].drawChess(x,y,graphics);
     }
 
-    public void addChess(int row,int col,int x ,int y){
-        chessesState[row][col] = chessType;
+    public void addChess(int row,int col){
+        state[row][col] = chessType;
 
         if(chessType == BLACK_CHESS){
-            chesses[row][col] = new BlackChess(new Point(x,y),Color.BLACK);
+            chesses[row][col] = new BlackChess(Color.BLACK);
             chessType = WHITE_CHESS;
         }
         else{
-            chesses[row][col] = new WhiteChess(new Point(x,y),Color.BLACK);
+            chesses[row][col] = new WhiteChess(Color.BLACK);
             chessType = BLACK_CHESS;
         }
     }
@@ -97,7 +86,7 @@ public class ChessManager {
 
         for(int i = row-1; i >= 0 ; i--){
 
-            if(chessesState[i][col] != chessesState[row][col]){
+            if(state[i][col] != state[row][col]){
                 break;
             }
             chessNum += 1;
@@ -107,7 +96,7 @@ public class ChessManager {
         }
 
         for(int i = row + 1; i < this.rows; i++){
-            if(chessesState[i][col] != chessesState[row][col]){
+            if(state[i][col] != state[row][col]){
                 break;
             }
             chessNum += 1;
@@ -125,7 +114,7 @@ public class ChessManager {
         int chessNum = 1;
 
         for(int i = col-1; i >= 0 ; i--){
-            if(chessesState[row][i] != chessesState[row][col]){
+            if(state[row][i] != state[row][col]){
                 break;
             }
             chessNum += 1;
@@ -135,7 +124,7 @@ public class ChessManager {
         }
 
         for(int i = col + 1; i < this.cols; i++){
-            if(chessesState[row][i] != chessesState[row][col]){
+            if(state[row][i] != state[row][col]){
                 break;
             }
             chessNum += 1;
@@ -150,7 +139,7 @@ public class ChessManager {
     private boolean leftOblique(int row,int col){
         int chessNum = 1;
         for(int i = row -1,j = col -1; i>= 0 && j >=0;i--,j--){
-            if(chessesState[i][j] != chessesState[row][col]){
+            if(state[i][j] != state[row][col]){
                 break;
             }
             chessNum += 1;
@@ -160,7 +149,7 @@ public class ChessManager {
         }
 
         for(int i = row +1,j = col + 1; i< rows && j < cols;i++,j++){
-            if(chessesState[i][j] != chessesState[row][col]){
+            if(state[i][j] != state[row][col]){
                 break;
             }
             chessNum += 1;
@@ -175,7 +164,7 @@ public class ChessManager {
     private boolean rightOblique(int row,int col){
         int chessNum = 1;
         for(int i = row + 1,j = col -1; i < rows && j >=0;i++,j--){
-            if(chessesState[i][j] != chessesState[row][col]){
+            if(state[i][j] != state[row][col]){
                 break;
             }
             chessNum += 1;
@@ -185,7 +174,7 @@ public class ChessManager {
         }
 
         for(int i = row -1,j = col + 1; i >= 0  && j < cols;i--,j++){
-            if(chessesState[i][j] != chessesState[row][col]){
+            if(state[i][j] != state[row][col]){
                 break;
             }
             chessNum += 1;
