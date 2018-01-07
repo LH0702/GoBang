@@ -89,10 +89,13 @@ public class Board extends JPanel {
 
 
     //将物理坐标映射为数组下标
-    private Point mappingToArray(int x,int y){
-        int row = (x - MARGIN) / getGridSpan();
-        int col = (y - MARGIN) / getGridSpan();
-        return new Point(row,col);
+    private int xMappingToArrayRow(int x){
+        return (x - MARGIN) / getGridSpan();
+    }
+
+    //将物理坐标映射为数组下标
+    private int yMappingToArrayCol(int y){
+        return (y - MARGIN) / getGridSpan();
     }
 
 
@@ -105,18 +108,16 @@ public class Board extends JPanel {
 
         @Override
         public void mousePressed(MouseEvent e){
-           Point point =  mappingToArray(e.getX(),e.getY());
-            System.out.println(point.x);
-            System.out.println(point.y);
-           if(chessMgr.isExist(point.x,point.y)){
+           int col = xMappingToArrayRow(e.getX());
+           int row = yMappingToArrayCol(e.getY());
+           if(chessMgr.isExist(row,col)){
                //TODO 需要给出提示和声音
                return;
            }
 
-
-            chessMgr.addChess(point.x,point.y);
-            chessMgr.drawChess(point.x,point.y,e.getX(),e.getY(),getGraphics());
-            if(chessMgr.isWin(point.x,point.y)){
+            chessMgr.addChess(row,col);
+            chessMgr.drawChess(row,col,e.getX(),e.getY(),getGraphics());
+            if(chessMgr.isWin(row,col)){
                 System.out.println("Win");
             }
         }
