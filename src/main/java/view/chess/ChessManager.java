@@ -70,10 +70,131 @@ public class ChessManager {
         }
     }
 
-    public boolean isWin(){
-        //TODO 判断是否赢棋
+    public boolean isWin(int row,int col){
+
+       if(horizontalJudget(row,col)){
+           return true;
+       }
+
+       if(verticalJudget(row,col)){
+           return true;
+       }
+
+       if(leftOblique(row,col)){
+           return true;
+       }
+
+       if(rightOblique(row,col)){
+           return true;
+       }
+
         return false;
     }
 
+    // 横向判断
+    private boolean horizontalJudget(int row,int col){
+        int chessNum = 1;
+
+        for(int i = row-1; i >= 0 ; i--){
+
+            if(chessesState[i][col] != chessesState[row][col]){
+                break;
+            }
+            chessNum += 1;
+            if(chessNum >= 5){
+                return true;
+            }
+        }
+
+        for(int i = row + 1; i < this.rows; i++){
+            if(chessesState[i][col] != chessesState[row][col]){
+                break;
+            }
+            chessNum += 1;
+            if(chessNum >= 5){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    //纵向判断
+
+    private boolean verticalJudget(int row,int col){
+        int chessNum = 1;
+
+        for(int i = col-1; i >= 0 ; i--){
+            if(chessesState[row][i] != chessesState[row][col]){
+                break;
+            }
+            chessNum += 1;
+            if(chessNum >= 5){
+                return true;
+            }
+        }
+
+        for(int i = col + 1; i < this.cols; i++){
+            if(chessesState[row][i] != chessesState[row][col]){
+                break;
+            }
+            chessNum += 1;
+            if(chessNum >= 5){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean leftOblique(int row,int col){
+        int chessNum = 1;
+        for(int i = row -1,j = col -1; i>= 0 && j >=0;i--,j--){
+            if(chessesState[i][j] != chessesState[row][col]){
+                break;
+            }
+            chessNum += 1;
+            if(chessNum >= 5){
+                return true;
+            }
+        }
+
+        for(int i = row +1,j = col + 1; i< rows && j < cols;i++,j++){
+            if(chessesState[i][j] != chessesState[row][col]){
+                break;
+            }
+            chessNum += 1;
+            if(chessNum >= 5){
+                return true;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean rightOblique(int row,int col){
+        int chessNum = 1;
+        for(int i = row + 1,j = col -1; i < rows && j >=0;i++,j--){
+            if(chessesState[i][j] != chessesState[row][col]){
+                break;
+            }
+            chessNum += 1;
+            if(chessNum >= 5){
+                return true;
+            }
+        }
+
+        for(int i = row -1,j = col + 1; i >= 0  && j < cols;i--,j++){
+            if(chessesState[i][j] != chessesState[row][col]){
+                break;
+            }
+            chessNum += 1;
+            if(chessNum >= 5){
+                return true;
+            }
+        }
+
+        return true;
+    }
 
 }
