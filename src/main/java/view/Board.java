@@ -1,12 +1,12 @@
 package view;
 
-import view.chess.Chess;
 import view.chess.ChessManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 
 public class Board extends JPanel {
 
@@ -90,12 +90,13 @@ public class Board extends JPanel {
 
     //将物理坐标映射为数组下标
     private int xMappingToArrayRow(int x) {
-        return (x - MARGIN) / getGridSpan();
+        return Math.round((float)(x - MARGIN) / getGridSpan());
     }
 
     //将物理坐标映射为数组下标
     private int yMappingToArrayCol(int y) {
-        return (y - MARGIN) / getGridSpan();
+       // RoundingMode.HALF_UP
+        return Math.round((float)(y - MARGIN) / getGridSpan());
     }
 
 
