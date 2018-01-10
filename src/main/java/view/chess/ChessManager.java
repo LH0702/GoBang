@@ -24,12 +24,15 @@ public class ChessManager {
         initChess();
     }
 
-    private void initChess() {
+    public void initChess() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 state[i][j] = EMPTY_CHESS;
             }
         }
+
+        chesses = new Chess[rows][cols];
+        chessType = BLACK_CHESS;
     }
 
 
@@ -184,6 +187,14 @@ public class ChessManager {
         }
 
         return false;
+    }
+
+    public String getCurrentChess(){
+        if(chessType == BLACK_CHESS){
+            return "White Chess";
+        }else{
+            return "Black Chess";
+        }
     }
 
 }
