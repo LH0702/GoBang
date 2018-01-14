@@ -1,5 +1,8 @@
 package view.board.chess;
 
+import control.record.Caretaker;
+import control.record.Memento;
+
 import java.awt.*;
 
 public class ChessManager {
@@ -60,6 +63,9 @@ public class ChessManager {
             chesses[row][col] = new WhiteChess(Color.BLACK);
             chessType = BLACK_CHESS;
         }
+
+        Memento memento = new Memento(state.clone());
+        Caretaker.getInstance().addMemento(memento);
     }
 
     public boolean isWin(int row,int col){

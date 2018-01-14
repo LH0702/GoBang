@@ -32,6 +32,4 @@ public abstract class Chess {
 
     abstract  protected RadialGradientPaint getPaint (int x, int y);
 
-
-
 }

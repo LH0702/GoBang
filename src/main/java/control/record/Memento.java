@@ -1,9 +1,14 @@
 package control.record;
 
 public class Memento {
-    
-    public void getState(){
 
+    private final int[][] state ;
+    public Memento(int[][] currentState){
+        state = currentState;
+    }
+
+    public int[][] getState(){
+        return state;
     }
 
 }
