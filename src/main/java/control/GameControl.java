@@ -12,10 +12,10 @@ public class GameControl {
     private int firstHand = 0;
 
     //开始游戏监听
-    private List startGameListener = new ArrayList<GoBangObservable>();
+    private List<GoBangObservable> startGameListener = new ArrayList<GoBangObservable>();
 
     //结束游戏监听
-    private List endGameListener = new ArrayList<GoBangObservable>();
+    private List<GoBangObservable> endGameListener = new ArrayList<GoBangObservable>();
 
 
     private static final GameControl INSTANCE = new GameControl();
@@ -34,10 +34,19 @@ public class GameControl {
 
     public void startGame(){
         isStart = true;
+
+        for(GoBangObservable listener : startGameListener){
+            listener.update();
+        }
     }
 
     public  void endGame(){
         isStart = false;
+
+        for(GoBangObservable listener :endGameListener){
+            listener.update();
+        }
+
     }
 
     public void addStartListener(GoBangObservable observable){

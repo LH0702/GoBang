@@ -24,6 +24,13 @@ public class Board extends JPanel {
         addMouseListener(borderListener);
         addMouseMotionListener(borderListener);
         chessMgr = new ChessManager(ROWS, COLS);
+
+        //添加事件监听
+        GameControl.getInstance().addStartListener(() ->{
+            chessMgr.initChess();
+            repaint();
+        });
+
     }
 
 
@@ -127,7 +134,7 @@ public class Board extends JPanel {
             chessMgr.drawChess(row, col, rowMappingToPointX(row), colMappingToPointY(col), getGraphics());
 
             if (chessMgr.isWin(row, col)) {
-                JOptionPane.showMessageDialog(null, chessMgr.getCurrentChess() + " is Win", "对局结束",
+                JOptionPane.showConfirmDialog(null, chessMgr.getCurrentChess() + " is Win", "对局结束",
                         JOptionPane.YES_NO_OPTION);
                 System.out.println("Win");
                 GameControl.getInstance().endGame();

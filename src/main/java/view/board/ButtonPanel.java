@@ -13,6 +13,14 @@ public class ButtonPanel extends JPanel{
     public ButtonPanel(){
         initButton();
         addButton();
+        addListener();
+    }
+
+
+    private void addListener(){
+        GameControl.getInstance().addEndListener(() -> {
+            startButton.setEnabled(true);
+        });
     }
 
     private void addButton() {
@@ -38,7 +46,7 @@ public class ButtonPanel extends JPanel{
     }
 
     private void initSurrenderButton(){
-        startButton.addActionListener(event ->{
+        surrenderButton.addActionListener(event ->{
             GameControl.getInstance().endGame();
             startButton.setEnabled(true);
         });
