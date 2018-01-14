@@ -1,11 +1,10 @@
-package view;
+package view.board;
 
-import view.chess.ChessManager;
+import control.GameControl;
+import view.board.chess.ChessManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -17,11 +16,7 @@ public class Board extends JPanel {
     private final int MARGIN = 20;  //边距
     private final int ROWS = 15;  //棋盘行数
     private final int COLS = 15;  //棋盘列数
-    private boolean isStart = false;
     private ChessManager chessMgr;
-    private JButton startButton = new JButton("Start");
-    private JButton backButton = new JButton("Back");
-    private JButton nextButton = new JButton("Next");
 
 
     public Board() {
@@ -29,38 +24,8 @@ public class Board extends JPanel {
         addMouseListener(borderListener);
         addMouseMotionListener(borderListener);
         chessMgr = new ChessManager(ROWS, COLS);
-        setBackground(Color.pink);
-
-        addBackButton();
-        addStartButton();
-        addNextButton();
-
     }
 
-    private void addStartButton(){
-        startButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println(e.getActionCommand());
-                System.out.println(e.paramString());
-                if(! isStart){
-                    isStart = true;
-                    chessMgr.initChess();
-                    repaint();
-                    startButton.disable();
-                }
-            }
-        });
-        add(startButton);
-    }
-
-    private void addBackButton(){
-        add(backButton);
-    }
-
-    private void addNextButton(){
-        add(nextButton);
-    }
 
     @Override
     public void paintComponent(Graphics graphics) {
@@ -146,7 +111,7 @@ public class Board extends JPanel {
 
         @Override
         public void mousePressed(MouseEvent e) {
-            if(! isStart){
+            if(!GameControl.getInstance().isStart()){
                 return ;
             }
 
@@ -165,7 +130,7 @@ public class Board extends JPanel {
                 JOptionPane.showMessageDialog(null, chessMgr.getCurrentChess() + " is Win", "对局结束",
                         JOptionPane.YES_NO_OPTION);
                 System.out.println("Win");
-                isStart = false;
+                GameControl.getInstance().endGame();
             }
 
         }
@@ -174,17 +139,6 @@ public class Board extends JPanel {
             setCursor(new Cursor(Cursor.HAND_CURSOR));  //光标为手掌
         }
     }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Test draw a board");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 600);
-        frame.setVisible(true);
-        frame.setBackground(Color.pink);
-        frame.add(new Board());
-
-    }
-
 
 }
 

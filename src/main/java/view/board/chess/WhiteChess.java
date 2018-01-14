@@ -1,4 +1,4 @@
-package view.chess;
+package view.board.chess;
 
 import java.awt.*;
 
