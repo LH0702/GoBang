@@ -53,10 +53,12 @@ public class ButtonPanel extends JPanel{
     }
 
     private void initBackButton(){
+        backButton.setEnabled(false);
         //TODO
     }
 
     private void initNextButton(){
+        nextButton.setEnabled(false);
         //TODO
     }
 
