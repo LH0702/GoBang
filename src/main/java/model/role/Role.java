@@ -1,6 +1,9 @@
-package model;
+package model.role;
 
-public class Role {
+import model.PieceColor;
+import model.Step;
+
+public abstract class Role {
 
     private Role opponent ;
 
@@ -36,5 +39,7 @@ public class Role {
         this.maximizingPlayer = false;
     }
 
+    public abstract boolean isPlayer();
 
+    public abstract void generateNextStep();
 }

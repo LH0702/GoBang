@@ -1,71 +1,60 @@
-package view.board.chess;
+package model;
 
-import control.record.Caretaker;
-import control.record.Memento;
+import util.GoBangConstant;
 
-import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class ChessManager {
 
-    private static final int BLACK_CHESS = 1;
-    private static final int WHITE_CHESS = 0;
-    private static final int EMPTY_CHESS = -1;
-    private final int cols;
-    private final int rows;
-    private int chessType;
-
     // 用于维护棋子的状态，0 代表 white chess ，1 代表 black chess 。 -1 代表 empty
-    private int[][] state;
-    private Chess[][] chesses;
+    private PieceColor[][] state;
 
-    public ChessManager(int rows, int cols) {
-        this.cols = cols;
-        this.rows = rows;
-        state = new int[rows][cols];
-        chesses = new Chess[rows][cols];
+    private List<ModelChangeListener> listeners = new ArrayList<>();
 
+    private static final ChessManager instance = new ChessManager();
+
+    public static ChessManager getInstance(){
+        return instance;
+    }
+
+    private ChessManager(){
+
+    }
+
+    public void init(){
         initChess();
     }
 
     public void initChess() {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                state[i][j] = EMPTY_CHESS;
+        state = new PieceColor[GoBangConstant.ROWS][GoBangConstant.COLS];
+        for (int i = 0; i < GoBangConstant.ROWS; i++) {
+            for (int j = 0; j < GoBangConstant.COLS; j++) {
+                state[i][j] = PieceColor.BLANK;
             }
         }
-
-        chesses = new Chess[rows][cols];
-        chessType = BLACK_CHESS;
     }
 
 
 
     public boolean isExist(int row, int col){
-        if(state[row][col] != EMPTY_CHESS){
+        if(state[row][col] != PieceColor.BLANK){
             return true;
         }
 
         return false;
     }
 
-    public void drawChess(int row,int col,int x ,int y,Graphics graphics){
-        chesses[row][col].drawChess(x,y,graphics);
-    }
-
-    public void addChess(int row,int col){
-        state[row][col] = chessType;
-
-        if(chessType == BLACK_CHESS){
-            chesses[row][col] = new BlackChess(Color.BLACK);
-            chessType = WHITE_CHESS;
-        }
-        else{
-            chesses[row][col] = new WhiteChess(Color.BLACK);
-            chessType = BLACK_CHESS;
+    public boolean addChess(int row,int col,PieceColor color){
+        if(isExist(row,col)){
+            return false;
         }
 
-        Memento memento = new Memento(state.clone());
-        Caretaker.getInstance().addMemento(memento);
+        this.state[row][col] = color;
+        //TODO 定义一个chess 类封装一下入参
+        notifyAllListeners(row,col,color);
+        return true;
     }
 
     public boolean isWin(int row,int col){
@@ -104,7 +93,7 @@ public class ChessManager {
             }
         }
 
-        for(int i = row + 1; i < this.rows; i++){
+        for(int i = row + 1; i < GoBangConstant.ROWS; i++){
             if(state[i][col] != state[row][col]){
                 break;
             }
@@ -132,7 +121,7 @@ public class ChessManager {
             }
         }
 
-        for(int i = col + 1; i < this.cols; i++){
+        for(int i = col + 1; i < GoBangConstant.COLS; i++){
             if(state[row][i] != state[row][col]){
                 break;
             }
@@ -157,7 +146,7 @@ public class ChessManager {
             }
         }
 
-        for(int i = row +1,j = col + 1; i< rows && j < cols;i++,j++){
+        for(int i = row +1,j = col + 1; i< GoBangConstant.ROWS && j < GoBangConstant.COLS;i++,j++){
             if(state[i][j] != state[row][col]){
                 break;
             }
@@ -172,7 +161,7 @@ public class ChessManager {
 
     private boolean rightOblique(int row,int col){
         int chessNum = 1;
-        for(int i = row + 1,j = col -1; i < rows && j >=0;i++,j--){
+        for(int i = row + 1,j = col -1; i < GoBangConstant.ROWS && j >=0;i++,j--){
             if(state[i][j] != state[row][col]){
                 break;
             }
@@ -182,7 +171,7 @@ public class ChessManager {
             }
         }
 
-        for(int i = row -1,j = col + 1; i >= 0  && j < cols;i--,j++){
+        for(int i = row -1,j = col + 1; i >= 0  && j < GoBangConstant.COLS;i--,j++){
             if(state[i][j] != state[row][col]){
                 break;
             }
@@ -195,12 +184,17 @@ public class ChessManager {
         return false;
     }
 
-    public String getCurrentChess(){
-        if(chessType == BLACK_CHESS){
-            return "White Chess";
-        }else{
-            return "Black Chess";
+    public PieceColor[][] getState() {
+        return state.clone();
+    }
+
+    private void notifyAllListeners(int row,int col,PieceColor color){
+        for(ModelChangeListener listener : listeners){
+            listener.addChess(row,col,color);
         }
     }
 
+    public void addListener(ModelChangeListener listener){
+        this.listeners.add(listener);
+    }
 }
