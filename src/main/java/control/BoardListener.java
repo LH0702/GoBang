@@ -1,8 +1,10 @@
 package control;
 
+import model.ChessManager;
+import model.role.Role;
+import model.role.RoleManager;
 import view.board.Board;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -26,6 +28,9 @@ public class BoardListener extends MouseAdapter {
         int row = board.xMappingToArrayRow(e.getX());
         int col = board.yMappingToArrayCol(e.getY());
 
+        Role role = RoleManager.getInstance().getCurrentPlayer();
+        ChessManager.getInstance().addChess(col,row,role.getColor());
+        RoleManager.getInstance().nextPlayerRound();
     }
 
     public void mouseMoved(MouseEvent e) {

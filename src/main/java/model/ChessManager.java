@@ -27,7 +27,7 @@ public class ChessManager {
         initChess();
     }
 
-    public void initChess() {
+    private void initChess() {
         state = new PieceColor[GoBangConstant.ROWS][GoBangConstant.COLS];
         for (int i = 0; i < GoBangConstant.ROWS; i++) {
             for (int j = 0; j < GoBangConstant.COLS; j++) {
@@ -55,6 +55,14 @@ public class ChessManager {
         //TODO 定义一个chess 类封装一下入参
         notifyAllListeners(row,col,color);
         return true;
+    }
+
+    public void clear(){
+        initChess();
+
+        for(ModelChangeListener listener : listeners){
+            listener.clear();
+        }
     }
 
     public boolean isWin(int row,int col){

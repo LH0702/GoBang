@@ -6,38 +6,57 @@ import util.GoBangConstant;
 
 public class Minimax {
 
-    public int go(int depth, int alpha, int beta, Role role, PieceColor[][] node){
+    public Step go(int depth, int alpha, int beta, Role role, PieceColor[][] node){
         if(depth == 0){
-            return Score.getInstance().evaluate();
+            return new Step(0,0,Score.getInstance().evaluate());
         }
 
         if(role.isMaximizingPlayer()){
-            int score = Integer.MIN_VALUE;
+            Step step = new Step(0,0,Integer.MIN_VALUE);
             for(int i = 0; i < GoBangConstant.ROWS; i++){
                 for(int j = 0; j < GoBangConstant.COLS; j++){
                     if(node[i][j] != PieceColor.BLANK){
                         continue;
                     }
                     node[i][j] = role.getColor();
-                    score = Math.max(score,go(depth - 1,alpha,beta,role.getOpponent(),node));
+                    int score = go(depth - 1,alpha,beta,role.getOpponent(),node).getScore();
+                    if(score > step.getScore()){
+                        step.setScore(score);
+                        step.setX(i);
+                        step.setY(j);
+                    }
+
                     node[i][j] = PieceColor.BLANK;
+                    alpha = Math.max(score,alpha);
+                    if(alpha >= beta){
+                        return step;
+                    }
                 }
             }
 
-            return score;
+            return step;
         }else{
-            int score = Integer.MAX_VALUE;
+            Step step = new Step(0,0,Integer.MAX_VALUE);
             for(int i = 0; i < GoBangConstant.ROWS ; i++){
                 for(int j = 0; j < GoBangConstant.COLS; j++){
                     if(node[i][j] != PieceColor.BLANK){
                         continue;
                     }
                     node[i][j] = role.getColor();
-                    score = Math.min(score,go(depth - 1,alpha,beta,role.getOpponent(),node));
+                    int score = go(depth - 1,alpha,beta,role.getOpponent(),node).getScore();
+                    if(score < step.getScore()){
+                        step.setScore(score);
+                        step.setX(i);
+                        step.setY(j);
+                    }
                     node[i][j] = PieceColor.BLANK;
+                    beta = Math.min(score,beta);
+                    if(alpha >= beta){
+                        return step;
+                    }
                 }
             }
-            return score;
+            return step;
         }
     }
 }

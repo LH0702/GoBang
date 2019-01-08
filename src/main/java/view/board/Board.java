@@ -93,10 +93,14 @@ public class Board extends JPanel implements ModelChangeListener{
 
         //TODO 换一种方式
         if(PieceColor.BLACK == color){
-            new BlackChess(Color.black).drawChess(row,col,getGraphics());
+            new BlackChess(Color.black).drawChess(realX,realY,getGraphics());
         }else if(color == PieceColor.WHITE){
-            new WhiteChess(Color.WHITE).drawChess(row,col,getGraphics());
+            new WhiteChess(Color.WHITE).drawChess(realX,realY,getGraphics());
         }
+    }
+
+    @Override
+    public void clear() {
     }
 }
 
